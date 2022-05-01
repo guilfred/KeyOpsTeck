@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  web:
+    container_name: web_koth
+    image: nginx:latest
+    volumes:
+      - ./:/var/www/koth
+      - ./docker/default.tpl.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8080:80
+    environment:
+      - NGINX_HOST=app-project.lab
+    links:
+      - "dbkoth"
+      - "php:php"
+  php:
+    container_name: app_koth
+    build: .
+    ports:
+      - '9000:9000'
+    volumes:
+      - ./:/var/www/koth
+      - ./docker/php.ini:/usr/local/etc/php/php.ini
+    links:
+      - "dbkoth:dbkoth"
+  dbkoth:
+    container_name: dbkoth
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: main
+      POSTGRES_PASSWORD: ShuF78leTRx
+    volumes:
+      - data-keyopsdb:/var/lib/postgresql/data:rw
+    ports:
+      - "5432:5432"
+  pgadminkoth:
+    container_name: pgadminkoth
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: app@keyoptech.lab
+      PGADMIN_DEFAULT_PASSWORD: K@Zsw8rL
+    ports:
+      - 9990:80
+    depends_on:
+      - "dbkoth"
+    links:
+      - "dbkoth"
+volumes:
+###> doctrine/doctrine-bundle ###
+  data-keyopsdb:
+###< doctrine/doctrine-bundle ###
