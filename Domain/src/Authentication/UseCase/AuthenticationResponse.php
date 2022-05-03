@@ -3,15 +3,16 @@
 namespace Domain\Authentication\UseCase;
 
 use Domain\Service\Alert;
+use JetBrains\PhpStorm\Pure;
 
 class AuthenticationResponse
 {
     private $alert;
     private $auth;
 
-    public function __construct(Alert $alert)
+    public function __construct()
     {
-        $this->alert = $alert;
+        $this->alert = new Alert();
     }
 
     /**

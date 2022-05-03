@@ -1,8 +1,8 @@
 <?php
 
-namespace Domain\Authentication\UseCase;
+namespace Domain\Authentication\Entity;
 
-class AuthenticationRequest
+class Auth
 {
     /**
      * @var string

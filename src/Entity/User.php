@@ -26,6 +26,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private string $password;
 
+    #[ORM\Column(type: 'boolean')]
+    private $enabled;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private $lastLogin;
+
+    public function __construct()
+    {
+        $this->enabled = true;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -134,5 +145,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function isEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getLastLogin(): ?\DateTimeImmutable
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin(?\DateTimeImmutable $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
     }
 }
