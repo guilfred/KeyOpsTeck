@@ -1,3 +1,4 @@
+
 ### Variables
 CMP=docker-compose
 exec=docker exec -it app_koth bash
@@ -24,5 +25,3 @@ logs: docker-compose.yml
 ##### PHP CLI #####
 exec-php: docker-compose.yml
 	$(exec)
-
-
