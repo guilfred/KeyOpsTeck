@@ -2,13 +2,13 @@
 
 namespace Domain\Authentication\UseCase;
 
+use Domain\Authentication\Entity\User;
 use Domain\Service\Alert;
-use JetBrains\PhpStorm\Pure;
 
 class AuthenticationResponse
 {
-    private $alert;
-    private $auth;
+    private Alert $alert;
+    private $user;
 
     public function __construct()
     {
@@ -23,20 +23,13 @@ class AuthenticationResponse
         return $this->alert;
     }
 
-    /**
-     * @param Authentication $auth
-     */
-    public function setAuth(Authentication $auth): void
+    public function getUser(): ?User
     {
-        $this->auth = $auth;
+        return $this->user;
     }
 
-    /**
-     * @return Authentication
-     */
-    public function getAuth(): Authentication
+    public function setUser(?User $user)
     {
-        return $this->auth;
+        $this->user = $user;
     }
-
 }

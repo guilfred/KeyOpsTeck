@@ -2,14 +2,16 @@
 
 namespace Domain\Authentication\Gateway;
 
-use Domain\Authentication\Entity\Auth;
+use Domain\Authentication\Entity\User;
 
 interface AuthGateway
 {
     /**
      * @param string $username
+     * @param string $password
      *
-     * @return Auth
+     * @return User|null
      */
-    public function getUser(string $username): Auth;
+    public function getUserByCredentials(string $username, string $password): ?User;
+
 }

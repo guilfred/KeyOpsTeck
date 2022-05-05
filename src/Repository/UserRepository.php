@@ -3,13 +3,18 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Service\UserPasswordHasher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Domain\Authentication\Gateway\AuthGateway;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Domain\Authentication\Entity\User as DomainUser;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -19,9 +24,15 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, AuthGateway
 {
-    public function __construct(ManagerRegistry $registry)
+
+    public function __construct(
+        ManagerRegistry $registry,
+        UserPasswordHasherInterface $passwordHasher,
+        private JWTTokenManagerInterface $JWTManager,
+        private UserPasswordHasher $hasher
+    )
     {
         parent::__construct($registry, User::class);
     }
@@ -64,32 +75,28 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?User
+    /**
+     * @param string $username
+     * @param string $password
+     *
+     * @return DomainUser|null
+     */
+    public function getUserByCredentials(string $username, string $password): ?DomainUser
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $user = $this->findOneBy(['username' => $username]);
+        if (!$user) {
+            return null;
+        }
+
+        if (!$this->hasher->isPasswordValid($user->getPassword(), $password)) {
+            return null;
+        }
+
+        return (new DomainUser())
+            ->setUsername($user->getUserIdentifier())
+            ->setPassword($user->getPassword())
+            ->setToken($this->JWTManager->create($user))
+            ;
     }
-    */
 }

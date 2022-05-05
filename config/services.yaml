@@ -13,12 +13,30 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    App\:
+
+    Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher:
+        autowire: true
+
+    symfony_services:
+        namespace: App\
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+        tags: [ symfony_services ]
+
+    domain_services:
+        namespace: Domain\
+        resource: '../Domain/src/'
+        exclude:
+            - '../Domain/src/UseCase/{AuthenticationPresenter, AuthenticationRequest, AuthenticationResponse}'
+            - '../Domain/src/Entity/'
+            - '../Domain/src/Security/'
+            - '../Domain/src/Gateway/'
+            - '../Domain/src/Service/'
+        tags: [ domain_services ]
+
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -28,10 +46,10 @@ services:
         decorates: 'api_platform.openapi.factory'
         arguments: [ '@.inner' ]
 
-    App\EventListener\JWT\AuthenticationSuccess:
+    App\EventListener\JWT\AuthenticationFailure:
         tags:
             -
                 name: kernel.event_listener
-                event: lexik_jwt_authentication.on_authentication_success
-                method: onAuthenticationSuccessResponse
+                event: lexik_jwt_authentication.on_authentication_failure
+                method: onAuthenticationFailureResponse
 
