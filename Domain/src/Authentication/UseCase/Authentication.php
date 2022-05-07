@@ -6,7 +6,6 @@ namespace Domain\Authentication\UseCase;
 use Domain\Authentication\Entity\User;
 use Domain\Authentication\Gateway\AuthGateway;
 use Domain\Service\Alert;
-use Domain\Service\ValidateAuth;
 
 class Authentication  {
 
@@ -35,12 +34,10 @@ class Authentication  {
      */
     private function verifyUser(string $username, string $password): ?User
     {
-        ValidateAuth::validCredentials($username, $password);
         $user = $this->gateway->getUserByCredentials($username, $password);
 
         return $user ?? null;
     }
-
 
     /**
      * @param AuthenticationRequest  $request

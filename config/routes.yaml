@@ -2,3 +2,8 @@ api_login_check:
   path: /api/login_check
   controller: App\Controller\AuthenticationController
   methods: POST
+
+parcel_information:
+  path: /api/parcels/{uuid}
+  controller: App\Controller\ParcelController
+  methods: GET

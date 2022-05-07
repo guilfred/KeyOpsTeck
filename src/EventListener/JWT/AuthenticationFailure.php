@@ -2,7 +2,7 @@
 
 namespace App\EventListener\JWT;
 
-use App\Presenter\AuthFailAlert;
+use App\Presenter\Auth\AuthFailAlert;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationFailureResponse;
 

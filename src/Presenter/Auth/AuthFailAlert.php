@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presenter;
+namespace App\Presenter\Auth;
 
 use Domain\Service\Alert;
 

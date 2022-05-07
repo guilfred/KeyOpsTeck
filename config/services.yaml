@@ -34,7 +34,6 @@ services:
             - '../Domain/src/Entity/'
             - '../Domain/src/Security/'
             - '../Domain/src/Gateway/'
-            - '../Domain/src/Service/'
         tags: [ domain_services ]
 
 

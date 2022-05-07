@@ -99,4 +99,5 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setToken($this->JWTManager->create($user))
             ;
     }
+
 }

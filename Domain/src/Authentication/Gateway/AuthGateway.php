@@ -13,5 +13,4 @@ interface AuthGateway
      * @return User|null
      */
     public function getUserByCredentials(string $username, string $password): ?User;
-
 }

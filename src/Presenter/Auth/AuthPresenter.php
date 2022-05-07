@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Presenter;
+namespace App\Presenter\Auth;
 
 use App\ViewModel\AuthViewModel;
 use Domain\Authentication\UseCase\AuthenticationPresenter;
 use Domain\Authentication\UseCase\AuthenticationResponse;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class AuthPresenter implements AuthenticationPresenter
 {

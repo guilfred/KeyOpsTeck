@@ -2,8 +2,7 @@
 
 namespace App\Controller;
 
-
-use App\Presenter\AuthPresenter;
+use App\Presenter\Auth\AuthPresenter;
 use Domain\Authentication\UseCase\Authentication;
 use Domain\Authentication\UseCase\AuthenticationRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

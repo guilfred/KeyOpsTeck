@@ -6,18 +6,15 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Uid\Uuid;
 
 class UserFixtures extends Fixture
 {
-    private UserPasswordHasherInterface $passwordHasher;
 
     /**
      * @param UserPasswordHasherInterface $passwordHasher
      */
-    public function __construct(UserPasswordHasherInterface $passwordHasher)
-    {
-        $this->passwordHasher = $passwordHasher;
-    }
+    public function __construct(private UserPasswordHasherInterface $passwordHasher) {}
 
     /**
      * @param ObjectManager $manager
@@ -31,6 +28,7 @@ class UserFixtures extends Fixture
 
         $user
             ->setUsername('panda')
+            ->setRoles(['ROLE_USER'])
             ->setPassword($password);
 
         $manager->persist($user);
